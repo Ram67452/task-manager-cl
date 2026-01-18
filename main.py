@@ -1,24 +1,44 @@
-tasks = []
+TASK_FILE = "tasks.txt"
 
-while True:
-    print("1. Add Task")
-    print("2. View Tasks")
-    print("3. Exit")
+def add_task():
+    task = input("Enter new task: ")
+    with open(TASK_FILE, "a") as file:
+        file.write(task + "\n")
+    print("✅ Task added successfully")
 
-    choice = input("Enter choice: ")
+def show_tasks():
+    try:
+        with open(TASK_FILE, "r") as file:
+            tasks = file.readlines()
 
-    if choice == "1":
-        task = input("Enter task: ")
-        tasks.append(task)
-        print("Task Added")
+        if not tasks:
+            print("⚠️ No tasks found")
+        else:
+            print("\n📋 Your Tasks:")
+            for index, task in enumerate(tasks, start=1):
+                print(f"{index}. {task.strip()}")
 
-    elif choice == "2":
-        print("Tasks:")
-        for t in tasks:
-            print("-", t)
+    except FileNotFoundError:
+        print("⚠️ No task file found. Add a task first.")
 
-    elif choice == "3":
-        break
+def menu():
+    while True:
+        print("\n--- Task Manager CLI ---")
+        print("1. Add Task")
+        print("2. Show Tasks")
+        print("3. Exit")
 
-    else:
-        print("Invalid choice")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            add_task()
+        elif choice == "2":
+            show_tasks()
+        elif choice == "3":
+            print("👋 Exiting Task Manager")
+            break
+        else:
+            print("❌ Invalid choice, try again")
+
+# Program start
+menu()
